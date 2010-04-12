@@ -37,6 +37,8 @@ module XmlSubsetMatcher
         if is_element?(subset_node, superset_node)
           is_match = name_eql?(subset_node, superset_node)
           @error = "Node name of subset node '#{subset_node.inspect}' does not match that of superset node '#{superset_node.inspect}'" unless is_match
+
+          is_match &&= attr_eql?(subset_node, superset_node)
         end
         is_match &&= subset_node.children.all? do |subset_child|
           matching_node = superset_node.children.detect do |superset_child|
@@ -60,6 +62,19 @@ module XmlSubsetMatcher
     end
     def name_eql?(a,b)
       a.node_name == b.node_name
+    end
+    def attr_eql?(a,b)
+      if a.attributes.keys != b.attributes.keys
+        @error = "attributes of #{a.inspect} don't match #{b.inspect}"
+        return false
+      end
+      a.attributes.keys.each do |attr_name|
+        if a[attr_name] != b[attr_name]
+          @error = "attributes of #{a.inspect} don't match #{b.inspect}"
+          return false
+        end
+      end
+      true
     end
   end
 

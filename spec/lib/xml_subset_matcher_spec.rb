@@ -92,7 +92,7 @@ describe 'XmlSubsetMatcher' do
         <phrase>
             <uuid>060e985b-0307-4c8f-b43f-c16f0e45196d</uuid>
             <source_text>Fake Catalan Source</source_text>
-            <text />
+            <text nil="true"/>
         </phrase>
     EOS
     superset = <<-EOS
@@ -186,5 +186,27 @@ describe 'XmlSubsetMatcher' do
     EOS
       subset.should be_xml_subset_of(superset)
   end
+
+  it "should not match if nodes have different attributes" do
+    subset = "<foo/>"
+    superset = "<foo attr2='123'/>"
+
+    subset.should_not be_xml_subset_of(superset)
+  end
+
+  it "should not match if nodes have same attributes with some different values" do
+    subset = "<foo attr1='1' attr2='2'>"
+    superset = "<foo attr1='1' attr2='different'/>"
+
+    subset.should_not be_xml_subset_of(superset)
+  end
+
+  it "should match if all attributes are the same, ignoring order" do 
+    subset = "<foo attr1='1' attr2='2'>"
+    superset = "<foo attr2='2' attr1='1'/>"
+
+    subset.should be_xml_subset_of(superset)
+  end
+    
 end
 

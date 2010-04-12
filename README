@@ -2,6 +2,7 @@ Contributors:
 Sarah Allen, http://github.com/ultrasaurus
 Wolfram Arnold, http://github.com/wolframarnold 
 Nikolay, http://github.com/jastix
+Pete Hodgson, http://thepete.net http://github.com/moredip
 
 Build and install the gem:
   gem build xml_subset_matcher.gemspec
